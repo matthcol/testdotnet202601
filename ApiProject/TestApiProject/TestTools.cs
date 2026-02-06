@@ -69,12 +69,12 @@ namespace ApiProject
             Assert.Equal(expectedPgcd, actualPgcd);
         }
 
-        [Theory]
+        [Theory]  // NB: timeout pour des assertions de temps
         [InlineData(0, 1)]
         [InlineData(1, 0)]
         [InlineData(-5, 1)]
         [InlineData(1, -5)]
-        // TODO: timeout si boucle infinie
+        // NB: timeout si boucle infinie => Task
         void TestPgcd_ko(int a, int b)
         {
             Assert.Throws<ArgumentException>(() => Tools.Pgcd(a, b)); // indirect call (bac à sable)
