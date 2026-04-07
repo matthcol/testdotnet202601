@@ -141,4 +141,17 @@ test.describe('Application Todo — E2E', () => {
     const input = page.getByTestId('new-todo-input');
     await expect(input).toHaveAttribute('placeholder', 'Nouvelle tâche…');
   });
+
+  test('nettoie les todos completed via le bouton "Masquer les terminées"', async ({ page}) => {
+    await waitForTodos(page)
+    const cleanBtn = page.getByTestId('clean-btn');
+    // compter les elements complétés + total
+    const countTotalBefore = await page.getByTestId('todo-item').count();
+    const countTotalCompletedBefore = await page.locator('[data-testid="todo-item"].completed').count();
+    await cleanBtn.click();
+    const countTotalAfter = await page.getByTestId('todo-item').count();
+    const countTotalCompletedAfter = await page.locator('[data-testid="todo-item"].completed').count();
+    expect(countTotalAfter).toBe(countTotalBefore - countTotalCompletedBefore)
+    expect(countTotalCompletedAfter).toBe(0)
+  })
 });

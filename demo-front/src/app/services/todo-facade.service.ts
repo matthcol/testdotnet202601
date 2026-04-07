@@ -67,4 +67,9 @@ export class TodoFacadeService {
   get pendingCount(): number {
     return this.todos().filter(t => !t.completed).length;
   }
+
+  cleanCompleted(): void {
+    // TODO
+
+  }
 }

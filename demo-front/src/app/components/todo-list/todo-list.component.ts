@@ -76,6 +76,11 @@ import { TodoFacadeService } from '../../services/todo-facade.service';
       <button data-testid="load-btn" (click)="facade.loadAll()">
         Charger les todos
       </button>
+
+       <!-- Nettoyer les completed -->
+      <button data-testid="clean-btn" (click)="facade.cleanCompleted()">
+        Masquer les terminées
+      </button>
     </section>
   `,
   styles: [`
