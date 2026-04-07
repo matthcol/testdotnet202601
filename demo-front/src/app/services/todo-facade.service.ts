@@ -69,7 +69,7 @@ export class TodoFacadeService {
   }
 
   cleanCompleted(): void {
-    // TODO
-
+    // NB: update method signal change state to the registered components
+    this.todos.update(list => list.filter(t => !t.completed));
   }
 }

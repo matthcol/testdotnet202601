@@ -142,6 +142,41 @@ describe('TodoFacadeService — mock TodoService', () => {
     });
   });
 
+  // --- cleanCompleted() ---
+  describe('cleanCompleted()', () => {
+    it('supprime du signal tous les todos completed', () => {
+      todoServiceMock.getAll.mockReturnValue(of(MOCK_TODOS));
+      facade.loadAll();
+
+      facade.cleanCompleted();
+
+      expect(facade.todos().every(t => !t.completed)).toBe(true);
+    });
+
+    it('conserve les todos non completed', () => {
+      todoServiceMock.getAll.mockReturnValue(of(MOCK_TODOS));
+      facade.loadAll();
+
+      facade.cleanCompleted();
+
+      expect(facade.todos()).toContainEqual(MOCK_TODOS[0]);
+      expect(facade.todos()).toHaveLength(1);
+    });
+
+    it('ne fait rien si aucun todo n\'est completed', () => {
+      const allPending: Todo[] = [
+        { id: 1, title: 'Todo 1', completed: false },
+        { id: 2, title: 'Todo 2', completed: false },
+      ];
+      todoServiceMock.getAll.mockReturnValue(of(allPending));
+      facade.loadAll();
+
+      facade.cleanCompleted();
+
+      expect(facade.todos()).toHaveLength(2);
+    });
+  });
+
   // --- Compteurs dérivés ---
   describe('compteurs', () => {
     beforeEach(() => {

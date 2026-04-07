@@ -143,12 +143,23 @@ test.describe('Application Todo — E2E', () => {
   });
 
   test('nettoie les todos completed via le bouton "Masquer les terminées"', async ({ page}) => {
+    // NB: wait for the todos displayed at start 
     await waitForTodos(page)
     const cleanBtn = page.getByTestId('clean-btn');
-    // compter les elements complétés + total
+    // count before action
     const countTotalBefore = await page.getByTestId('todo-item').count();
     const countTotalCompletedBefore = await page.locator('[data-testid="todo-item"].completed').count();
+
+    // action: click onthe button
     await cleanBtn.click();
+
+    // verify
+    const expectedTotal = countTotalBefore - countTotalCompletedBefore;
+    // NB: .toHaveCount retry until assertion is ok (with a timeout) in order
+    // to let the signal be propagated and the UI refreshed
+    // NB2: default timeout can be configurated in playwroght.config.ts
+    // await expect(page.getByTestId('todo-item')).toHaveCount(expectedTotal); // default timeout
+    await expect(page.getByTestId('todo-item')).toHaveCount(expectedTotal, { timeout: 5_000 });
     const countTotalAfter = await page.getByTestId('todo-item').count();
     const countTotalCompletedAfter = await page.locator('[data-testid="todo-item"].completed').count();
     expect(countTotalAfter).toBe(countTotalBefore - countTotalCompletedBefore)
